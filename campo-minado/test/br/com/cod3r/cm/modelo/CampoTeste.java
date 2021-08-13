@@ -97,8 +97,8 @@ public class CampoTeste {
 	@Test
 	void testeAbrirMinadoNaoMarcado() {
 		campo.minar();
-		// testando se o método abrir() gerou uma exceção e
-		// se a exceção gerada foi o tipo/classe exception esperada
+		// testando se o mÃ©todo abrir() gerou uma exceÃ§Ã£o e
+		// se a exceÃ§Ã£o gerada foi o tipo/classe exception esperada
 		assertThrows(ExplosaoException.class, () -> {
 			campo.abrir();
 		});
