@@ -187,11 +187,11 @@ public class CampoTeste {
 
 		assertEquals(2, campo.minasNaVizinhanca());
 	}
-	
+
 	@Test
 	void testeReiniciar() {
 		campo.reiniciar();
-		
+
 		assertTrue(campo.isFechado() && !campo.isMinado() && !campo.isMarcado());
 	}
 
@@ -200,7 +200,7 @@ public class CampoTeste {
 		campo.alternarMarcacao();
 		assertEquals("x", campo.toString());
 	}
-	
+
 	@Test
 	void testeToStringAbertoEMinadoNaVizinhanca() {
 		Campo campo22 = new Campo(2, 2);
@@ -213,16 +213,16 @@ public class CampoTeste {
 		campo.abrir();
 		assertEquals("2", campo.toString());
 	}
-	
+
 	@Test
 	void testeCampoAberto() {
 		campo.abrir();
 		assertEquals(" ", campo.toString());
 	}
-	
+
 	@Test
 	void testeCampoIncognito() {
 		assertEquals("?", campo.toString());
 	}
-	
+
 }
