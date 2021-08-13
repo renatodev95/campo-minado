@@ -3,6 +3,8 @@ package br.com.cod3r.cm.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.cod3r.cm.excecao.ExplosaoException;
+
 public class Campo {
 
 	private final int linha;
@@ -24,11 +26,11 @@ public class Campo {
 		boolean linhaDiferente = linha != vizinho.linha;
 		boolean colunaDiferente = coluna != vizinho.coluna;
 		boolean diagonal = linhaDiferente && colunaDiferente;
-		
+
 		int deltaLinha = Math.abs(linha - vizinho.linha);
 		int deltaColuna = Math.abs(coluna - vizinho.coluna);
 		int deltaGeral = deltaLinha + deltaColuna;
-		
+
 		if (deltaGeral == 1 && !diagonal) {
 			vizinhos.add(vizinho);
 			return true;
@@ -39,4 +41,59 @@ public class Campo {
 			return false;
 		}
 	}
+
+	void alternarMarcacao() {
+		// a marcação só será alternada caso o campo esteja fechado
+		if (!aberto) {
+			marcado = !marcado;
+		}
+	}
+
+	boolean abrir() {
+		// este método só será ativado caso o campo selecionado
+		// esteja fechado e não esteja marcado
+		if (!aberto && !marcado) {
+			aberto = true;
+
+			// caso o campo selecionado esteja minado, será lançada esta exceção
+			// e o jogo é encerrado.
+			if (minado) {
+				throw new ExplosaoException();
+			}
+
+			// abaixo temos uma chamada recursiva
+			// caso a vizinhanca esteja segura os outros vizinhos acionarão
+			// o método abrir enquando tiverem outras vizinhanças seguras
+			if (vizinhancaSegura()) {
+				vizinhos.forEach(v -> v.abrir());
+			}
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	boolean vizinhancaSegura() {
+		// Se nenhum vizinho estiver minado a vizinhanca será considerada segura
+		return vizinhos.stream().noneMatch(v -> v.minado);
+	}
+
+	void minar() {
+		minado = true;
+	}
+
+	// criando um getter para atributo do tipo boolean
+	public boolean isMarcado() {
+		return marcado;
+	}
+
+	public boolean isAberto() {
+		return aberto;
+	}
+	
+	public boolean isFechado() {
+		return !isAberto();
+	}
+
 }
