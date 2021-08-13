@@ -14,7 +14,7 @@ public class Campo {
 	private boolean minado = false;
 	private boolean marcado = false;
 
-	// Autorelacionamento (aqui temos uma relação de 1 pra N consigo mesmo)
+	// Autorelacionamento (aqui temos uma relaÃ§Ã£o de 1 pra N consigo mesmo)
 	private List<Campo> vizinhos = new ArrayList<>();
 
 	Campo(int linha, int coluna) {
@@ -43,27 +43,27 @@ public class Campo {
 	}
 
 	void alternarMarcacao() {
-		// a marcação só será alternada caso o campo esteja fechado
+		// a marcaÃ§Ã£o sÃ³ serÃ¡ alternada caso o campo esteja fechado
 		if (!aberto) {
 			marcado = !marcado;
 		}
 	}
 
 	boolean abrir() {
-		// este método só será ativado caso o campo selecionado
-		// esteja fechado e não esteja marcado
+		// este mÃ©todo sÃ³ serÃ¡ ativado caso o campo selecionado
+		// esteja fechado e nÃ£o esteja marcado
 		if (!aberto && !marcado) {
 			aberto = true;
 
-			// caso o campo selecionado esteja minado, será lançada esta exceção
-			// e o jogo é encerrado.
+			// caso o campo selecionado esteja minado, serÃ¡ lanÃ§ada esta exceÃ§Ã£o
+			// e o jogo Ã© encerrado.
 			if (minado) {
 				throw new ExplosaoException();
 			}
 
 			// abaixo temos uma chamada recursiva
-			// caso a vizinhanca esteja segura os outros vizinhos acionarão
-			// o método abrir enquando tiverem outras vizinhanças seguras
+			// caso a vizinhanca esteja segura os outros vizinhos acionarÃ£o
+			// o mÃ©todo abrir enquando tiverem outras vizinhanÃ§as seguras
 			if (vizinhancaSegura()) {
 				vizinhos.forEach(v -> v.abrir());
 			}
@@ -75,7 +75,7 @@ public class Campo {
 	}
 
 	boolean vizinhancaSegura() {
-		// Se nenhum vizinho estiver minado a vizinhanca será considerada segura
+		// Se nenhum vizinho estiver minado a vizinhanca serÃ¡ considerada segura
 		return vizinhos.stream().noneMatch(v -> v.minado);
 	}
 
@@ -91,9 +91,52 @@ public class Campo {
 	public boolean isAberto() {
 		return aberto;
 	}
-	
+
 	public boolean isFechado() {
 		return !isAberto();
 	}
 
+	public boolean isMinado() {
+		return minado;
+	}
+
+	public int getLinha() {
+		return linha;
+	}
+
+	public int getColuna() {
+		return coluna;
+	}
+
+	boolean objetivoAlcancado() {
+		boolean desvendado = !minado && aberto;
+		boolean protegido = minado && marcado;
+		return desvendado || protegido;
+	}
+
+	long minasNaVizinhanca() {
+		// utilizando o count para saber a quantidade de minas na vizinhanÃ§a
+		return vizinhos.stream().filter(v -> v.minado).count();
+	}
+
+	void reiniciar() {
+		aberto = false;
+		minado = false;
+		marcado = false;
+	}
+
+	public String toString() {
+		if (marcado) {
+			return "x";
+		} else if (aberto && minado) {
+			return "*";
+		} else if (aberto && minasNaVizinhanca() > 0) {
+			return Long.toString(minasNaVizinhanca());
+		} else if (aberto) {
+			return " ";
+		} else {
+			return "?";
+		}
+	}
 }
+
