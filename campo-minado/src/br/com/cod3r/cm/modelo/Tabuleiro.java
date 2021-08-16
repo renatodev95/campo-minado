@@ -79,13 +79,24 @@ public class Tabuleiro {
 		sortearMinas();
 	}
 	
-	// Exibicao da classe no console
+	// Exibicao dos campos no console
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		
+		sb.append(" ");
+		sb.append(" ");
+		// exibindo a numeracao das colunas no topo
+		for (int c = 0; c < colunas; c++) {
+			sb.append(" ");
+			sb.append(c);
+			sb.append(" ");
+		}
+		sb.append("\n");
+		
 		int i = 0;
 		for (int l = 0; l < linhas; l++) {
-			
+			sb.append(l); // exibindo a numeracao das linhas na lateral
+			sb.append(" ");
 			for (int c = 0; c < colunas; c++) {
 				sb.append(" ");
 				sb.append(campos.get(i));
